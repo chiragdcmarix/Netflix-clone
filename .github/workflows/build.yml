@@ -40,12 +40,19 @@ jobs:
           DOCKER_CLI_ACI: 1
 
   deploy:    
-    needs: build  
-    runs-on: ubuntu-latest  
-    steps:
-      - name: Pull the docker image
-        run: docker pull jinesh1893/netfix:latest
-      - name: Trivy image scan
-        run: trivy image jinesh1893/netflix:latest
-      - name: Run the container netflix
-        run: docker run -d --name netflix -p 8081:80 jinesh1893/netflix:latest
+  needs: build  
+  runs-on: ubuntu-latest  
+  steps:
+    - name: Install Trivy
+      run: |
+        sudo apt-get update
+        sudo apt-get install trivy -y
+
+    - name: Pull the docker image
+      run: docker pull jinesh1893/netfix:latest
+
+    - name: Trivy image scan
+      run: trivy image jinesh1893/netflix:latest
+
+    - name: Run the container netflix
+      run: docker run -d --name netflix -p 8081:80 jinesh1893/netflix:latest
