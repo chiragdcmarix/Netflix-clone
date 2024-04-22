@@ -43,6 +43,11 @@ jobs:
     needs: build  # Corrected syntax
     runs-on: ubuntu-latest  # Added runs-on attribute
     steps:
+      - name: Debug
+        run: |
+          echo "Current PATH: $PATH"
+          which trivy
+
       - name: Pull the docker image
         run: docker pull jinesh1893/netfix:latest
 
