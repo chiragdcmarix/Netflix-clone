@@ -1,4 +1,4 @@
-name: Build
+name: Build and Deploy
 
 on:
   push:
@@ -13,21 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
       
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      
-      # If you wish to fail your job when the Quality Gate is red, uncomment the following lines.
-      # This would typically be used to fail a deployment.
-      # - name: SonarQube Quality Gate
-      #   uses: sonarsource/sonarqube-quality-gate-action@master
-      #   timeout-minutes: 5
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Install Trivy
         run: |
@@ -47,9 +39,9 @@ jobs:
         env:
           DOCKER_CLI_ACI: 1
 
-  - deploy:    
-    needs: build-analyze-scan  
-    runs-on: [ctpl124-netflix]  
+  deploy:    
+    needs: build  
+    runs-on: ubuntu-latest  
     steps:
       - name: Pull the docker image
         run: docker pull jinesh1893/netfix:latest
