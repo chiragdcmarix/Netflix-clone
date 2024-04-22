@@ -41,9 +41,13 @@ jobs:
 
   deploy:    
     needs: build  # Corrected syntax
-  - name: Pull the docker image
+    runs-on: ubuntu-latest  # Added runs-on attribute
+    steps:
+      - name: Pull the docker image
         run: docker pull jinesh1893/netfix:latest
-  - name: Trivy image scan
+
+      - name: Trivy image scan
         run: trivy image jinesh1893/netflix:latest
-- name: Run the container netflix
+
+      - name: Run the container netflix
         run: docker run -d --name netflix -p 8081:80 jinesh1893/netflix:latest
