@@ -46,3 +46,14 @@ jobs:
           docker push jinesh1893/netfix
         env:
           DOCKER_CLI_ACI: 1
+
+  - deploy:    
+    needs: build-analyze-scan  
+    runs-on: [ctpl124-netflix]  
+    steps:
+      - name: Pull the docker image
+        run: docker pull jinesh1893/netfix:latest
+      - name: Trivy image scan
+        run: trivy image jinesh1893/netflix:latest
+      - name: Run the container netflix
+        run: docker run -d --name netflix -p 8081:80 jinesh1893/netflix:latest
