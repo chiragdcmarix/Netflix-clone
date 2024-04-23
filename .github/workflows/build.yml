@@ -44,7 +44,7 @@ jobs:
     runs-on: [aws-netflix]  
     steps:
       - name: Pull the docker image
-        run: docker pull jinesh1893/netfix
+        run: docker pull jinesh1893/netfix:latest
       - name: Trivy image scan
         run: trivy image jinesh1893/netfix
       - name: Run the container netflix
